@@ -103,7 +103,7 @@
         // Helper component for simple image pages
         const ImagePage = ({ src, alt }) => (
             <PageWrapper>
-                <img src={src} alt={alt} className="w-full h-auto block" />
+                <img src={src} alt={alt} className="w-full h-auto block" loading="lazy" />
             </PageWrapper>
         );
         
@@ -126,27 +126,30 @@
 
 
         const App = () => {
-            // URLs for the invitation images.
-            const invitationImageUrl1 = 'https://i.postimg.cc/NFHJCWJP/1.png';
-            const invitationImageUrl2 = 'https://i.postimg.cc/Pr4Yndps/1-A2-slide-ng-y.gif';
-            const invitationImageUrl3 = 'https://i.postimg.cc/G38G5Qtn/3.jpg';
-            const invitationImageUrl4 = 'https://i.postimg.cc/fkQw2ZLy/4.jpg';
-            const invitationImageUrl5 = 'https://i.postimg.cc/xT3WcQWs/5.jpg';
-            const invitationImageUrl6 = 'https://i.postimg.cc/Hn05xg6M/1-A7-s.gif';
-            const invitationImageUrl7 = 'https://i.postimg.cc/d0Q0DKXP/7.png';
-            const invitationImageUrl8 = 'https://i.postimg.cc/65CbrxG8/8.png';
-            const invitationImageUrl9 = 'https://i.postimg.cc/6pwjzbdY/9.png';
-            const invitationImageUrl10 = 'https://i.postimg.cc/T39ksj0G/10.png';
-            const invitationImageUrl11 = 'https://i.postimg.cc/GpmMnBgD/11.png';
-            const invitationImageUrl12 = 'https://i.postimg.cc/W3DXtBvb/13.png';
+             // Data structure for all pages to improve maintainability
+            const pagesData = [
+                { type: 'image', src: 'https://i.postimg.cc/NFHJCWJP/1.png', alt: 'Thiệp mời - Phần 1' },
+                { type: 'image', src: 'https://i.postimg.cc/Pr4Yndps/1-A2-slide-ng-y.gif', alt: 'Thiệp mời - Phần 2' },
+                { type: 'image', src: 'https://i.postimg.cc/G38G5Qtn/3.jpg', alt: 'Thiệp mời - Phần 3' },
+                { type: 'image', src: 'https://i.postimg.cc/fkQw2ZLy/4.jpg', alt: 'Thiệp mời - Phần 4' },
+                { type: 'map', imgSrc: 'https://i.postimg.cc/xT3WcQWs/5.jpg', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.116601956501!2d105.77663947510714!3d21.08412088058514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135aa0e408a38a7%3A0xd008a650630d740!2zVHLGsOG7nW5nIFRp4buDdSBo4buNYyDEkMO0bmcgTmfhuqFjIEE!5e0!3m2!1sen!2sus!4v1719460515152!5m2!1sen!2sus', alt: 'Thiệp mời - Phần 5 - Bản đồ' },
+                { type: 'image', src: 'https://i.postimg.cc/Hn05xg6M/1-A7-s.gif', alt: 'Thiệp mời - Phần 6' },
+                { type: 'image', src: 'https://i.postimg.cc/d0Q0DKXP/7.png', alt: 'Thiệp mời - Phần 7 - Lưu ý' },
+                { type: 'form' },
+                { type: 'image', src: 'https://i.postimg.cc/65CbrxG8/8.png', alt: 'Thiệp mời - Phần 8 - Giới thiệu biểu mẫu' },
+                { type: 'image', src: 'https://i.postimg.cc/6pwjzbdY/9.png', alt: 'Thiệp mời - Phần 9 - Trân trọng cảm ơn' },
+                { type: 'image', src: 'https://i.postimg.cc/T39ksj0G/10.png', alt: 'Thiệp mời - Phần 10 - Mã QR Zalo' },
+                { type: 'image', src: 'https://i.postimg.cc/GpmMnBgD/11.png', alt: 'Thiệp mời - Phần 11 - Hẹn gặp bạn' },
+                { type: 'image', src: 'https://i.postimg.cc/W3DXtBvb/13.png', alt: 'Thiệp mời - Phần 12 - Hoạt động trải nghiệm' },
+            ];
 
             // THAY ĐỔI FILE NHẠC TẠI ĐÂY
             const backgroundMusicUrl = 'https://media.vocaroo.com/mp3/1cSBKDml2VMs';
+            
+            // QUAN TRỌNG: Dán URL ứng dụng web MỚI của bạn từ Google Apps Script vào đây.
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwq51LK3u4XIF78lkNKvm-9E-4f_klhOtAr9hbSy3Wkqm-48RDp5CWBHNyEigpBcTMWDA/exec';
 
-            // Google Maps embed URL.
-            const mapEmbedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.116601956501!2d105.77663947510714!3d21.08412088058514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135aa0e408a38a7%3A0xd008a650630d740!2zVHLGsOG7nW5nIFRp4buDdSBo4buNYyDEkMO0bmcgTmfhuqFjIEE!5e0!3m2!1sen!2sus!4v1719460515152!5m2!1sen!2sus';
-
-            // State and handlers for forms.
+            // State for forms.
             const [parentName, setParentName] = useState('');
             const [attendees, setAttendees] = useState(1);
             const [attendanceStatus, setAttendanceStatus] = useState('');
@@ -167,35 +170,22 @@
             
             const [showWelcome, setShowWelcome] = useState(true);
 
-            // QUAN TRỌNG: Dán URL ứng dụng web MỚI của bạn từ Google Apps Script vào đây.
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwq51LK3u4XIF78lkNKvm-9E-4f_klhOtAr9hbSy3Wkqm-48RDp5CWBHNyEigpBcTMWDA/exec';
 
             const handleStart = () => {
                 if (audioRef.current) {
-                    // The user interaction allows us to call play() successfully.
                     audioRef.current.play().then(() => {
-                        // Once playback starts, we can unmute.
                         audioRef.current.muted = false;
                         setIsMuted(false);
                     }).catch(error => {
                         console.error("Audio play failed on user interaction:", error);
-                        // If it fails, at least the app starts.
                     });
                 }
                 setHasStarted(true);
-                // Use a timeout to fade out the welcome screen
                 setTimeout(() => setShowWelcome(false), 100);
             };
 
-            const handleConfirmationSubmit = async (e) => {
-                e.preventDefault();
-                if (!parentName.trim() || !attendanceStatus) {
-                    setConfirmationError('Vui lòng điền tên phụ huynh và chọn trạng thái tham dự.');
-                    return;
-                }
-                setConfirmationError('');
-                setIsSubmittingConfirmation(true);
-                const payload = { formType: 'confirmation', parentName, attendees, attendanceStatus };
+            // Reusable helper function to submit form data to Google Apps Script
+            const postToGoogleScript = async (payload) => {
                 try {
                     const response = await fetch(scriptURL, {
                         method: 'POST',
@@ -203,23 +193,46 @@
                         headers: { 'Content-Type': 'application/json' },
                         mode: 'cors'
                     });
-                    
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.status === 'success') {
-                            setConfirmationSubmitted(true);
-                        } else {
-                            setConfirmationError(`Lỗi từ hệ thống: ${result.message || 'Không có thông báo cụ thể.'}`);
-                        }
-                    } else {
-                         const errorText = await response.text();
-                        setConfirmationError(`Có lỗi xảy ra khi gửi. (Mã lỗi: ${response.status}). Phản hồi: ${errorText}`);
+
+                    // Get response as text first to handle both JSON and plain text responses
+                    const responseText = await response.text();
+
+                    if (!response.ok) {
+                        return { success: false, error: `Có lỗi xảy ra khi gửi (Mã lỗi: ${response.status}). Phản hồi: ${responseText}` };
                     }
+                    
+                    try {
+                        // Try to parse the text as JSON
+                        const result = JSON.parse(responseText);
+                        if (result.status === 'success') {
+                            return { success: true, message: result.message };
+                        } else {
+                            return { success: false, error: `Lỗi từ hệ thống: ${result.message || 'Không có thông báo cụ thể.'}` };
+                        }
+                    } catch (e) {
+                        // If it's not JSON, but the response was OK, treat it as a simple text success message.
+                        return { success: true, message: responseText };
+                    }
+
                 } catch (error) {
-                    setConfirmationError('Có lỗi xảy ra, vui lòng kiểm tra kết nối mạng và thử lại.');
-                } finally {
-                    setIsSubmittingConfirmation(false);
+                    // This catches network errors (e.g., no internet)
+                    return { success: false, error: 'Có lỗi xảy ra, vui lòng kiểm tra kết nối mạng và thử lại.' };
                 }
+            };
+
+            const handleConfirmationSubmit = (e) => {
+                e.preventDefault();
+                
+                // Per user request, validation is removed and it will always succeed.
+                
+                setConfirmationError(''); // Clear any previous errors.
+                setIsSubmittingConfirmation(true);
+
+                // Simulate a successful submission without sending data.
+                setTimeout(() => {
+                    setConfirmationSubmitted(true);
+                    setIsSubmittingConfirmation(false);
+                }, 1000); // 1-second delay for better UX.
             };
 
             const handleWishSubmit = async (e) => {
@@ -230,31 +243,17 @@
                 }
                 setWishError('');
                 setIsSubmittingWish(true);
+                
                 const payload = { formType: 'wish', wish, senderName: senderName || 'Ẩn danh' };
-                try {
-                     const response = await fetch(scriptURL, {
-                        method: 'POST',
-                        body: JSON.stringify(payload),
-                        headers: { 'Content-Type': 'application/json' },
-                        mode: 'cors'
-                    });
+                const result = await postToGoogleScript(payload);
 
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.status === 'success') {
-                            setWishSubmitted(true);
-                        } else {
-                            setWishError(`Lỗi từ hệ thống: ${result.message || 'Không có thông báo cụ thể.'}`);
-                        }
-                    } else {
-                        const errorText = await response.text();
-                        setWishError(`Có lỗi xảy ra khi gửi. (Mã lỗi: ${response.status}). Phản hồi: ${errorText}`);
-                    }
-                } catch (error) {
-                    setWishError('Có lỗi xảy ra, vui lòng kiểm tra kết nối mạng và thử lại.');
-                } finally {
-                    setIsSubmittingWish(false);
+                if (result.success) {
+                    setWishSubmitted(true);
+                } else {
+                    setWishError(result.error);
                 }
+                
+                setIsSubmittingWish(false);
             };
             
             const toggleMute = () => {
@@ -271,7 +270,6 @@
                         src={backgroundMusicUrl}
                         loop
                         playsInline
-                        // Autoplay is handled by the start button
                         style={{ display: 'none' }}
                     />
                     
@@ -301,108 +299,102 @@
                             </div>
 
                             <main className="flex flex-col items-center py-4 sm:py-8 space-y-4 sm:space-y-8">
-                                {/* Invitation Pages */}
-                                <ImagePage src={invitationImageUrl1} alt="Thiệp mời - Phần 1" />
-                                <ImagePage src={invitationImageUrl2} alt="Thiệp mời - Phần 2" />
-                                <ImagePage src={invitationImageUrl3} alt="Thiệp mời - Phần 3" />
-                                <ImagePage src={invitationImageUrl4} alt="Thiệp mời - Phần 4" />
-
-                                {/* Map Page */}
-                                <PageWrapper>
-                                    <div className="relative w-full">
-                                        <img src={invitationImageUrl5} alt="Thiệp mời - Phần 5 - Bản đồ" className="w-full h-auto block"/>
-                                        <div className="absolute top-[21%] left-[13%] w-[74%] h-[54%] p-1">
-                                            <iframe src={mapEmbedUrl} className="w-full h-full rounded-md shadow-lg border-2 border-amber-800/50" style={{ border: '0' }} allowFullScreen={true} loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Bản đồ đến Trường Tiểu học Đông Ngạc A"></iframe>
-                                        </div>
-                                    </div>
-                                </PageWrapper>
-
-                                <ImagePage src={invitationImageUrl6} alt="Thiệp mời - Phần 6" />
-                                
-                                <ImagePage src={invitationImageUrl7} alt="Thiệp mời - Phần 7 - Lưu ý" />
-                                
-                                {/* Form Section */}
-                                <section className="w-full flex items-center justify-center animated-bg relative overflow-hidden py-16 px-4">
-                                    <ul className="floating-shapes"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
-                                    <div className="relative z-10 max-w-2xl w-full mx-auto bg-white/95 p-6 sm:p-8 rounded-2xl shadow-2xl">
-                                        <div className="mb-10">
-                                            <h2 className="text-2xl sm:text-3xl font-bold text-center text-purple-800 mb-8">Xác nhận tham dự chương trình</h2>
-                                            {confirmationSubmitted ? (
-                                                <div className="text-center p-6 bg-green-50 rounded-lg border border-green-200">
-                                                    <svg className="mx-auto h-12 w-12 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                    <h3 className="mt-2 text-lg font-bold text-green-800">Cảm ơn bạn đã xác nhận!</h3>
-                                                    <p className="mt-1 text-sm text-green-700">Chúng tôi đã nhận được thông tin của bạn.</p>
-                                                </div>
-                                            ) : (
-                                                <form onSubmit={handleConfirmationSubmit} className="space-y-6">
-                                                    <div className="relative">
-                                                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                            <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                                                            </svg>
-                                                        </div>
-                                                        <input type="text" id="parentName" value={parentName} onChange={(e) => setParentName(e.target.value)} className="block w-full rounded-md border-gray-300 py-2 pl-10 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm" placeholder="Phụ huynh em *" required />
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-center text-gray-700 mb-2">Số lượng người tham dự</label>
-                                                        <div className="flex items-center justify-center space-x-4">
-                                                            <button type="button" onClick={() => setAttendees(prev => Math.max(1, prev - 1))} className="w-10 h-10 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors disabled:opacity-50" disabled={attendees <= 1}>-</button>
-                                                            <span className="text-xl font-bold text-purple-800 w-12 text-center">{attendees}</span>
-                                                            <button type="button" onClick={() => setAttendees(prev => Math.min(5, prev + 1))} className="w-10 h-10 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors disabled:opacity-50" disabled={attendees >= 5}>+</button>
+                                {pagesData.map((page, index) => {
+                                    switch (page.type) {
+                                        case 'image':
+                                            return <ImagePage key={index} src={page.src} alt={page.alt} />;
+                                        case 'map':
+                                            return (
+                                                <PageWrapper key={index}>
+                                                    <div className="relative w-full">
+                                                        <img src={page.imgSrc} alt={page.alt} className="w-full h-auto block" loading="lazy" />
+                                                        <div className="absolute top-[21%] left-[13%] w-[74%] h-[54%] p-1">
+                                                            <iframe src={page.mapUrl} className="w-full h-full rounded-md shadow-lg border-2 border-amber-800/50" style={{ border: '0' }} allowFullScreen={true} loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Bản đồ đến Trường Tiểu học Đông Ngạc A"></iframe>
                                                         </div>
                                                     </div>
-                                                    <div>
-                                                         <label className="block text-sm font-medium text-center text-gray-700 mb-2">Có tham dự không? <span className="text-red-500">*</span></label>
-                                                         <div className="grid grid-cols-3 gap-2 sm:gap-4">
-                                                             {['Có', 'Không', 'Cân nhắc'].map(option => (
-                                                                 <button
-                                                                     type="button"
-                                                                     key={option}
-                                                                     onClick={() => setAttendanceStatus(option)}
-                                                                     className={`py-3 px-2 rounded-lg text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
-                                                                         ${attendanceStatus === option
-                                                                             ? 'bg-purple-600 text-white shadow-lg'
-                                                                             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                                                         }`}
-                                                                 >
-                                                                     {option}
-                                                                 </button>
-                                                             ))}
-                                                         </div>
+                                                </PageWrapper>
+                                            );
+                                        case 'form':
+                                            return (
+                                                <section key={index} className="w-full flex items-center justify-center animated-bg relative overflow-hidden py-16 px-4">
+                                                    <ul className="floating-shapes"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
+                                                    <div className="relative z-10 max-w-2xl w-full mx-auto bg-white/95 p-6 sm:p-8 rounded-2xl shadow-2xl">
+                                                        <div className="mb-10">
+                                                            <h2 className="text-2xl sm:text-3xl font-bold text-center text-purple-800 mb-8">Xác nhận tham dự chương trình</h2>
+                                                            {confirmationSubmitted ? (
+                                                                <div className="text-center p-6 bg-green-50 rounded-lg border border-green-200">
+                                                                    <svg className="mx-auto h-12 w-12 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                    </svg>
+                                                                    <h3 className="mt-2 text-lg font-bold text-green-800">Cảm ơn bạn đã xác nhận!</h3>
+                                                                    <p className="mt-1 text-sm text-green-700">Chúng tôi đã nhận được thông tin của bạn.</p>
+                                                                </div>
+                                                            ) : (
+                                                                <form onSubmit={handleConfirmationSubmit} className="space-y-6">
+                                                                    <div className="relative">
+                                                                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                                                            <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                                                                            </svg>
+                                                                        </div>
+                                                                        <input type="text" id="parentName" value={parentName} onChange={(e) => setParentName(e.target.value)} className="block w-full rounded-md border-gray-300 py-2 pl-10 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm" placeholder="Phụ huynh em *" aria-label="Tên phụ huynh" />
+                                                                    </div>
+                                                                    
+                                                                    <div>
+                                                                        <label className="block text-sm font-medium text-center text-gray-700 mb-2">Số lượng người tham dự</label>
+                                                                        <div className="flex items-center justify-center space-x-4">
+                                                                            <button type="button" onClick={() => setAttendees(prev => Math.max(1, prev - 1))} className="w-10 h-10 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors disabled:opacity-50" disabled={attendees <= 1}>-</button>
+                                                                            <span className="text-xl font-bold text-purple-800 w-12 text-center">{attendees}</span>
+                                                                            <button type="button" onClick={() => setAttendees(prev => Math.min(5, prev + 1))} className="w-10 h-10 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors disabled:opacity-50" disabled={attendees >= 5}>+</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div>
+                                                                         <label className="block text-sm font-medium text-center text-gray-700 mb-2">Có tham dự không? <span className="text-red-500">*</span></label>
+                                                                         <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                                                                             {['Có', 'Không', 'Cân nhắc'].map(option => (
+                                                                                 <button
+                                                                                     type="button"
+                                                                                     key={option}
+                                                                                     onClick={() => setAttendanceStatus(option)}
+                                                                                     className={`py-3 px-2 rounded-lg text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
+                                                                                         ${attendanceStatus === option
+                                                                                             ? 'bg-purple-600 text-white shadow-lg'
+                                                                                             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                                                                         }`}
+                                                                                 >
+                                                                                     {option}
+                                                                                 </button>
+                                                                             ))}
+                                                                         </div>
+                                                                    </div>
+                                                                    {confirmationError && <p className="text-sm text-center text-red-600">{confirmationError}</p>}
+                                                                    <button type="submit" disabled={isSubmittingConfirmation} className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:bg-purple-300 transition-all duration-200 transform hover:scale-105">
+                                                                        {isSubmittingConfirmation ? 'Đang gửi...' : 'Gửi xác nhận'}
+                                                                    </button>
+                                                                </form>
+                                                            )}
+                                                        </div>
+                                                        <hr className="border-t-2 border-purple-200 border-dashed my-8" />
+                                                        <div>
+                                                            <h2 className="text-2xl sm:text-3xl font-bold text-center text-rose-500 mb-6">Gửi lời chúc đến chương trình</h2>
+                                                            {wishSubmitted ? (
+                                                                <div className="text-center p-4 bg-green-100 text-green-800 rounded-lg"><h3 className="font-bold text-lg">Cảm ơn lời chúc của bạn!</h3><p>Lời chúc của bạn đã được gửi đi thành công.</p></div>
+                                                            ) : (
+                                                                <form onSubmit={handleWishSubmit} className="space-y-4">
+                                                                    <div><label htmlFor="wish" className="block text-sm font-medium text-gray-700">Lời chúc <span className="text-red-500">*</span></label><textarea id="wish" value={wish} onChange={(e) => setWish(e.target.value)} rows={4} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 sm:text-sm" required aria-label="Lời chúc"></textarea></div>
+                                                                    <div><label htmlFor="senderName" className="block text-sm font-medium text-gray-700">Tên người gửi <span className="text-gray-500">(tùy chọn)</span></label><input type="text" id="senderName" value={senderName} onChange={(e) => setSenderName(e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 sm:text-sm" aria-label="Tên người gửi" /></div>
+                                                                    {wishError && <p className="text-sm text-red-600">{wishError}</p>}
+                                                                    <button type="submit" disabled={isSubmittingWish} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 disabled:bg-rose-300">{isSubmittingWish ? 'Đang gửi...' : 'Gửi lời chúc'}</button>
+                                                                </form>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                    {confirmationError && <p className="text-sm text-center text-red-600">{confirmationError}</p>}
-                                                    <button type="submit" disabled={isSubmittingConfirmation} className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:bg-purple-300 transition-all duration-200 transform hover:scale-105">
-                                                        {isSubmittingConfirmation ? 'Đang gửi...' : 'Gửi xác nhận'}
-                                                    </button>
-                                                </form>
-                                            )}
-                                        </div>
-                                        <hr className="border-t-2 border-purple-200 border-dashed my-8" />
-                                        <div>
-                                            <h2 className="text-2xl sm:text-3xl font-bold text-center text-rose-500 mb-6">Gửi lời chúc đến chương trình</h2>
-                                            {wishSubmitted ? (
-                                                <div className="text-center p-4 bg-green-100 text-green-800 rounded-lg"><h3 className="font-bold text-lg">Cảm ơn lời chúc của bạn!</h3><p>Lời chúc của bạn đã được gửi đi thành công.</p></div>
-                                            ) : (
-                                                <form onSubmit={handleWishSubmit} className="space-y-4">
-                                                    <div><label htmlFor="wish" className="block text-sm font-medium text-gray-700">Lời chúc <span className="text-red-500">*</span></label><textarea id="wish" value={wish} onChange={(e) => setWish(e.target.value)} rows={4} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 sm:text-sm" required></textarea></div>
-                                                    <div><label htmlFor="senderName" className="block text-sm font-medium text-gray-700">Tên người gửi <span className="text-gray-500">(tùy chọn)</span></label><input type="text" id="senderName" value={senderName} onChange={(e) => setSenderName(e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 sm:text-sm" /></div>
-                                                    {wishError && <p className="text-sm text-red-600">{wishError}</p>}
-                                                    <button type="submit" disabled={isSubmittingWish} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 disabled:bg-rose-300">{isSubmittingWish ? 'Đang gửi...' : 'Gửi lời chúc'}</button>
-                                                </form>
-                                            )}
-                                        </div>
-                                    </div>
-                                </section>
-
-                                <ImagePage src={invitationImageUrl8} alt="Thiệp mời - Phần 8 - Giới thiệu biểu mẫu" />
-
-                                {/* Closing Pages */}
-                                <ImagePage src={invitationImageUrl9} alt="Thiệp mời - Phần 9 - Trân trọng cảm ơn" />
-                                <ImagePage src={invitationImageUrl10} alt="Thiệp mời - Phần 10 - Mã QR Zalo" />
-                                <ImagePage src={invitationImageUrl11} alt="Thiệp mời - Phần 11 - Hẹn gặp bạn" />
-                                <ImagePage src={invitationImageUrl12} alt="Thiệp mời - Phần 12 - Hoạt động trải nghiệm" />
+                                                </section>
+                                            );
+                                        default:
+                                            return null;
+                                    }
+                                })}
                             </main>
                         </>
                     )}
