@@ -184,76 +184,27 @@
                 setTimeout(() => setShowWelcome(false), 100);
             };
 
-            // Reusable helper function to submit form data to Google Apps Script
-            const postToGoogleScript = async (payload) => {
-                try {
-                    const response = await fetch(scriptURL, {
-                        method: 'POST',
-                        body: JSON.stringify(payload),
-                        headers: { 'Content-Type': 'application/json' },
-                        mode: 'cors'
-                    });
-
-                    // Get response as text first to handle both JSON and plain text responses
-                    const responseText = await response.text();
-
-                    if (!response.ok) {
-                        return { success: false, error: `Có lỗi xảy ra khi gửi (Mã lỗi: ${response.status}). Phản hồi: ${responseText}` };
-                    }
-                    
-                    try {
-                        // Try to parse the text as JSON
-                        const result = JSON.parse(responseText);
-                        if (result.status === 'success') {
-                            return { success: true, message: result.message };
-                        } else {
-                            return { success: false, error: `Lỗi từ hệ thống: ${result.message || 'Không có thông báo cụ thể.'}` };
-                        }
-                    } catch (e) {
-                        // If it's not JSON, but the response was OK, treat it as a simple text success message.
-                        return { success: true, message: responseText };
-                    }
-
-                } catch (error) {
-                    // This catches network errors (e.g., no internet)
-                    return { success: false, error: 'Có lỗi xảy ra, vui lòng kiểm tra kết nối mạng và thử lại.' };
-                }
-            };
-
             const handleConfirmationSubmit = (e) => {
                 e.preventDefault();
-                
-                // Per user request, validation is removed and it will always succeed.
-                
-                setConfirmationError(''); // Clear any previous errors.
+                setConfirmationError('');
                 setIsSubmittingConfirmation(true);
 
-                // Simulate a successful submission without sending data.
                 setTimeout(() => {
                     setConfirmationSubmitted(true);
                     setIsSubmittingConfirmation(false);
-                }, 1000); // 1-second delay for better UX.
+                }, 1000);
             };
 
-            const handleWishSubmit = async (e) => {
+            const handleWishSubmit = (e) => {
                 e.preventDefault();
-                if (!wish.trim()) {
-                    setWishError('Vui lòng nhập lời chúc của bạn.');
-                    return;
-                }
                 setWishError('');
                 setIsSubmittingWish(true);
-                
-                const payload = { formType: 'wish', wish, senderName: senderName || 'Ẩn danh' };
-                const result = await postToGoogleScript(payload);
 
-                if (result.success) {
+                // Mô phỏng việc gửi đi và luôn thành công
+                setTimeout(() => {
                     setWishSubmitted(true);
-                } else {
-                    setWishError(result.error);
-                }
-                
-                setIsSubmittingWish(false);
+                    setIsSubmittingWish(false);
+                }, 1000);
             };
             
             const toggleMute = () => {
